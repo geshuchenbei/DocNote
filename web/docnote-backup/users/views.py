@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from .models import Users
+from users.models import Users
 # Create your views here.
 def loginPage(request):
     return render_to_response("login.html")
@@ -36,4 +36,7 @@ def register(request):
         return render_to_response("login.html",{'message_regsuccess':True})
     else:
         return render_to_response("register.html",{'message_userexist':True})
+
+
+
 
