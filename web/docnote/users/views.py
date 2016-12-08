@@ -5,7 +5,10 @@ from django.shortcuts import render_to_response
 from .models import Users
 # Create your views here.
 def loginPage(request):
-    return render_to_response("login.html")
+    return render_to_response("users/login.html")
+
+def indexPage(request):
+    return render_to_response("users/index.html")
 
 def login(request):
     try:
@@ -14,14 +17,14 @@ def login(request):
             request.session['user']=Users.objects.get(username=request.POST['username']).username
             return HttpResponseRedirect("/index/")
         else:
-            return render_to_response("login.html",{"error_wrongpwd":True})
+            return render_to_response("users/login.html",{"error_wrongpwd":True})
     except Users.DoesNotExist:
-        return render_to_response("login.html",{"error_nouser":True,"info_username":request.POST['username']})
+        return render_to_response("users/login.html",{"error_nouser":True,"info_username":request.POST['username']})
 
 
 
 def registerPage(request):
-    return render_to_response("register.html")
+    return render_to_response("users/register.html")
 
 def register(request):
     name=request.POST['username']
@@ -33,7 +36,7 @@ def register(request):
             password=request.POST['password'],
         )
         tempUser.save()
-        return render_to_response("login.html",{'message_regsuccess':True})
+        return render_to_response("users/login.html",{'message_regsuccess':True})
     else:
-        return render_to_response("register.html",{'message_userexist':True})
+        return render_to_response("users/register.html",{'message_userexist':True})
 

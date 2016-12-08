@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- saved from url=(0049)http://v3.bootcss.com/examples/starter-template/# -->
+{% load static %}
 <html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,13 +18,14 @@
 
     <!-- Bootstrap core CSS -->
     <link href="{% static 'users/css/bootstrap.min.css' %}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{% static 'users/css/bootstrap.min.css' %}" />
     <!-- Custom styles for this template -->
     <link href="http://v3.bootcss.com/examples/starter-template/starter-template.css" rel="stylesheet">
 
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{% static 'users/css/style.css' %}" rel="stylesheet">
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="./Starter Template for Bootstrap_files/ie-emulation-modes-warning.js"></script>
+    <script src="{% static 'users/js/ie-emulation-modes-warning.js' %}"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -175,7 +177,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{% static 'users/js/jquery.min.js' %}"></script>
-    <script src="{% static 'users/js/bootstrap.min.js' %}"></script>
+    <script src="{% static '/users/js/bootstrap.min.js' %}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="{% static 'users/js/ie10-viewport-bug-workaround.js' %}"></script>
 

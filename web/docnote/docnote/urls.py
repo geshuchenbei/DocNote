@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^login/$',views.login),
     url(r'^register/$',views.registerPage),
     url(r'^reg/$',views.register),
+    url(r'^index/$',views.indexPage),
 ]
