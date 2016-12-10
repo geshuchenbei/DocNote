@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="wsc500" >
     <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
 
     <title>登陆</title>
@@ -41,6 +41,11 @@
 {% if error_nouser %}
 		 <div class="alert alert-danger" role="alert">
 			 <strong>用户{{info_username}}不存在！</strong>
+		  </div>
+{% endif %}
+{% if error_notlogin %}
+		 <div class="alert alert-danger" role="alert">
+			 <strong>请先登陆！</strong>
 		  </div>
 {% endif %}
 

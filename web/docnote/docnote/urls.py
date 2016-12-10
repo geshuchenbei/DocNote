@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^register/$',views.registerPage),
     url(r'^reg/$',views.register),
     url(r'^index/$',views.indexPage),
+    url(r'^newclass/$',views.newclass),
 ]

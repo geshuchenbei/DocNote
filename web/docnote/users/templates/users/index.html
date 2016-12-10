@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="wsc500" >
     <link rel="icon" href="http://v3.bootcss.com/favicon.ico">
 
-    <title>test page</title>
+    <title>文献阅读管理</title>
 
 
 
@@ -35,6 +35,45 @@
   </head>
 
   <body>
+  
+
+  
+
+ 
+  
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">新增文献分类</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="/newclass/">
+      <div class="modal-body">
+      	<h5>选择父分类</h5>
+      	<select name="fatherid" class="form-control">
+      		<option value ="-1">无</option>
+      		{% for node in classList %}
+ 				 <option value ={{node.id}}>{{node.pathvalue}}</option>
+  				{% endfor %}
+			</select>
+        <h5>新增子分类名称</h5>
+        <input name="newname" type="text" class="form-control" placeholder="" required="">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -61,104 +100,58 @@
 
 
 	  <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
+        
+        
+        
+        
+        
+       <form action="/newclass/" class="form-signin">
+<button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#myModal">
+  新增分类
+</button>
+	  </form>
+	 
 		
-		
-<div class="tree well">
-<ul>
-	<li>
-		<span><i class="icon-folder-open"></i> Parent</span> <a href="">Goes somewhere</a>
-		<ul>
-			<li>
-				<span><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
-				<ul>
-					<li>
-						<span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
-					</li>
-				</ul>
-			</li>
-			<li>
-				<span><i class="icon-minus-sign"></i> Child</span> <a href="">Goes somewhere</a>
-				<ul>
-					<li>
-						<span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
-					</li>
-					<li>
-						<span><i class="icon-minus-sign"></i> Grand Child</span> <a href="">Goes somewhere</a>
-						<ul>
-							<li>
-								<span><i class="icon-minus-sign"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
-								<ul>
-									<li>
-										<span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
-									</li>
-									<li>
-										<span><i class="icon-leaf"></i> Great great Grand Child</span> <a href="">Goes somewhere</a>
-									</li>
-								 </ul>
-							</li>
-							<li>
-								<span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
-							</li>
-							<li>
-								<span><i class="icon-leaf"></i> Great Grand Child</span> <a href="">Goes somewhere</a>
-							</li>
-						</ul>
-					</li>
-					<li>
-						<span><i class="icon-leaf"></i> Grand Child</span> <a href="">Goes somewhere</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</li>
-	<li>
-		<span><i class="icon-folder-open"></i> Parent2</span> <a href="">Goes somewhere</a>
-		<ul>
-			<li>
-				<span><i class="icon-leaf"></i> Child</span> <a href="">Goes somewhere</a>
-			</li>
-		</ul>
-	</li>
-</ul>
+<div class="tree well">{% autoescape off %}
+	{{tablehtml}}
+{% endautoescape %}
 </div>
 		
 		
 		</div>
-        <div class="col-md-6">
+        <div class="col-md-7">
 
 
-
+			
 			<table class="table table-striped">
             <thead>
               <tr>
                 <th>#</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Username</th>
+                <th>文献名称</th>
+                <th>阅读状态</th>
+                <th>操作</th>
               </tr>
             </thead>
+            
+            {% for doc in docList %}
+            
             <tbody>
               <tr>
-                <td>1</td>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                <td>{{doc.id}}</td>
+                <td>{{doc.name}}</td>
+                <td>{{doc.readstatus}}</td>
+                <td>temp</td>
               </tr>
-              <tr>
-                <td>2</td>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
-              </tr>
+              
             </tbody>
+            {% empty %}
+				<div class="alert alert-info" role="alert">
+        		<strong>还没有文献，快去添加把！</strong>
+      		</div>  
+          	{% endfor %}
           </table>
+          
 
 
 		</div>

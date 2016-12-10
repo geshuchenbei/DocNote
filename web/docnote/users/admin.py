@@ -1,3 +1,6 @@
 from django.contrib import admin
-
-# Register your models here.
+from .models import Users,SortTree,Docs
+admin.site.register(Users)
+admin.site.register(SortTree)
+admin.site.register(Docs)
+# Register your models hrre.
