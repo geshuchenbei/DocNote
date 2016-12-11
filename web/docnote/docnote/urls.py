@@ -26,4 +26,17 @@ urlpatterns = [
     url(r'^reg/$',views.register),
     url(r'^index/$',views.indexPage),
     url(r'^newclass/$',views.newclass),
+	url(r'^newdoc/$',views.newdoc),
+	url(r'^docdetail/(?P<num>[0-9]+)/$',views.docdetail),
+	url(r'^setreadA/(?P<num>[0-9]+)/$',views.setreadA),
+	url(r'^setreadB/(?P<num>[0-9]+)/$',views.setreadB),
+	url(r'^updatestatus/(?P<num>[0-9]+)/$',views.updateStatus),
+	url(r'^updatename/(?P<num>[0-9]+)/$',views.updateName),
+	url(r'^updatelink/(?P<num>[0-9]+)/$',views.updateUrl),
+	url(r'^updatenode/(?P<num>[0-9]+)/$',views.updateNode),
+	url(r'^updatenote/(?P<num>[0-9]+)/$',views.updateNote),
+	url(r'^deldoc/(?P<num>[0-9]+)/$',views.delDoc),
+	url(r'^classdetail/(?P<num>[0-9]+)/cur/$',views.classcurDetail),
+	url(r'^classdetail/(?P<num>[0-9]+)/full/$',views.classfullDetail),
+
 ]

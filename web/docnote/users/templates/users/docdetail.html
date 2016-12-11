@@ -110,8 +110,201 @@
   </div>
 </div>
 
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改名称</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="/updatename/{{docInfo.id}}/">
+      <div class="modal-body">
 
 
+        <input name="newdocname" type="text" class="form-control" value="{{docInfo.docname}}" required="">
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">阅读状态</h4>
+      </div>
+      
+ 
+
+      
+      
+      
+      <form class="form-signin" role="form" method="post" action="/updatestatus/{{docInfo.id}}/">
+      <div class="modal-body">
+       
+       <h5>更改阅读状态</h5>
+       
+       {% if docInfo.readstatus == "未阅读" %}
+       
+       	<button type="sumbit" formaction="/setreadA/{{docInfo.id}}/" class="btn btn-info">设为已粗读</button>
+		
+			<button type="sumbit" formaction="/setreadB/{{docInfo.id}}/" class="btn btn-info">设为已精读</button>
+
+       {% elif docInfo.readstatus == "已粗读" %}
+       
+       	<button type="sumbit" formaction="/setreadB/{{docInfo.id}}/" class="btn btn-info">设为已精读</button>
+		
+       
+       {% endif %}
+       
+       <h5>手动选择</h5>
+        <select name="newdocstatus" class="form-control">
+        		{% if docInfo.readstatus == "未阅读" %}
+      			<option value ="未阅读" selected="selected">未阅读</option>
+      		{% else %}
+      			<option value ="未阅读">未阅读</option>
+      		{% endif %}
+      		
+      		{% if docInfo.readstatus == "已粗读" %}
+      			<option value ="已粗读" selected="selected">已粗读</option>
+      		{% else %}
+      			<option value ="已粗读">已粗读</option>
+      		{% endif %}
+      		
+      		{% if docInfo.readstatus == "已精读" %}
+      			<option value ="已精读" selected="selected">已精读</option>
+      		{% else %}
+      			<option value ="已精读">已精读</option>
+      		{% endif %}
+			</select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改文献分类</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="/updatenode/{{docInfo.id}}/">
+      <div class="modal-body">
+
+        <select name="newfatherid" class="form-control">
+      		<option value ="-1">无</option>
+      		{% for node in classList %}
+      			{% if docInfo.treenodeid == node.id %}
+ 				 <option selected="selected" value ={{node.id}}>{{node.pathvalue}}</option>
+ 				 	{% else %}
+ 				 <option value ={{node.id}}>{{node.pathvalue}}</option>
+ 				 	{% endif %}
+  				{% endfor %}
+  				
+			</select>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">更新文献链接</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="/updatelink/{{docInfo.id}}/">
+      <div class="modal-body">
+
+      	<input name="newurl" type="text" class="form-control" value="{{docInfo.docurl}}" required="">
+      	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="myModal10" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">阅读笔记</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="/updatenote/{{docInfo.id}}/">
+      <div class="modal-body">
+
+			<textarea name="newnote" class="form-control" rows="10">{{docInfo.usernote}}</textarea>
+      	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="myModal86" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">删除</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="/deldoc/{{docInfo.id}}/">
+      <div class="modal-body">
+
+			<h5>确认删除么？删除后将不可恢复</h5>
+      	
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-danger">确认删除</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <!-- ---------------nav--------------------------- -->
 <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
@@ -141,7 +334,7 @@
 	  	<li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">分类管理 <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-          	<li><a href="/classdetail/">编辑分类</a></li>
+          	<li><a href="#">编辑分类</a></li>
             <li><a href="#">Something else here</a></li>
             <li class="divider"></li>
             <li><a href="#">Separated link</a></li>
@@ -207,58 +400,92 @@
 
 
 	  <div class="row">
-        <div class="col-md-5">
-        
-        
-       
-	 
-		
-<div class="tree well">{% autoescape off %}
-	{{tablehtml}}
-{% endautoescape %}
-</div>
-		
-		
-		</div>
-        <div class="col-md-7">
+	  
+	  
+	  
+	  <div class="col-md-3">
 
 
 			
 			<table class="table table-hover">
-            <thead>
-              <tr>
-                <th>文献名称</th>
-                <th>阅读状态</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            
-            {% for doc in docList %}
-            
-            <tbody>
-              <tr>
-                <td>{{doc.docname}}</td>
-                <td>{{doc.readstatus}}</td>
-                <td>
-                	<a href="/docdetail/{{doc.id}}">详细信息</a>
-	  				</td>
-              </tr>
-              
-            </tbody>
-            {% empty %}
-				<div class="alert alert-info" role="alert">
-        		<strong>还没有文献，快去添加把！</strong>
-      		</div>  
-          	{% endfor %}
+			
+
+				<thead><tr><th>文献名称</th><th>
+				<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal3">
+  					修改
+				</button>
+				</th></tr></thead>
+				<tbody><tr><td>{{docInfo.docname}}</td></tr></tbody>
+				
+				<thead><tr>	<th>阅读状态</th><th>
+				<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal4">
+  					修改
+				</button>
+				</th></tr></thead>
+				<tbody><tr><td>{{docInfo.readstatus}}</td></tr></tbody>
+				
+				<thead><tr>	<th>文献分类</th><th>
+				<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal5">
+  					修改
+				</button>
+				</th></tr></thead>
+				<tbody><tr><td>{{classInfo}}</td></tr></tbody>
+				
+				<thead><tr>	<th>文献链接</th><th>
+				<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal6">
+  					修改
+				</button>
+				</th></tr></thead>
+				<tbody><tr><td><a href="http://{{docInfo.docurl}}" target="view_window">{{docInfo.docurl}}</a></td></tr></tbody>
+				
+				
+				
+				<thead><tr>	<th>阅读日志</th><th></th></tr></thead>
+				<tbody><tr><td>{{docInfo.readlog|linebreaks}}</td></tr></tbody>
+				
+				
+				<thead><tr>	<th><button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#myModal86">
+  					删除文献
+				</button></th><th></th></tr></thead>
+			
+				
+				</tbody>
           </table>
           
 
 
 		</div>
 
+     <div class="col-md-9">
+
+
+			
+			<table class="table">
+            <thead><tr><th>阅读笔记</th><th>
+				<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal10">
+  					更新笔记
+				</button>
+				</th></tr></thead>
+            
+            <tbody><tr>
+
+                <td>{{docInfo.usernote|linebreaks}}</td>
+
+              </tr>
+              
+            </tbody>
+          </table>
+          
+          
+          
+         
+
 
 		</div>
 
+
+		</div>
+     
 
     </div><!-- /.container -->
 
