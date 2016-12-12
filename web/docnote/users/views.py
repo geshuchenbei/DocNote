@@ -262,6 +262,102 @@ def classfullDetail(request,num="1"):
     
     return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'docList':fulldocList,'fullDoc':True})
 
+def dreplace(bstr,key,newname):
+    k=bstr.split("-")
+    for i in range(len(k)):
+        if k[i]==key:
+            k[i]=newname
+    ans=""
+    for x in k:
+        ans+=x+"-"
+    return ans[:-1]
+def classnewname(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+
+    newname=request.POST['newclassname']
+    thisclass=SortTree.objects.get(owner=userid,id=num)
+    classlist=SortTree.objects.filter(owner=userid)
+    for x in classlist:
+        x.pathvalue=dreplace(x.pathvalue,thisclass.value,newname)
+        x.save()
+    thisclass=SortTree.objects.get(owner=userid,id=num)
+    thisclass.value=newname
+    thisclass.save()
+
+    return HttpResponseRedirect("/classdetail/"+num+"/edit/")
+
+def classnewfather(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+
+  
+
+    classList = SortTree.objects.filter(owner=userid).order_by("pathvalue")
+    curnode = SortTree.objects.get(owner=userid,id=num)
+    tempsonlist = SortTree.objects.filter(owner=userid,key__contains=curnode.key+str(curnode.id)+"-").order_by("level")
+    fathernode=SortTree.objects.get(owner=userid,id=request.POST['newfatherid'])
+    curnode.key=fathernode.key+str(fathernode.id)+"-"
+    curnode.level=fathernode.level+1
+    curnode.parendid=fathernode.id
+    curnode.pathvalue=fathernode.pathvalue+"-"+curnode.value
+    curnode.save()
+
+    for x in tempsonlist:
+        tempfa=SortTree.objects.get(owner=userid,id=x.parendid)
+        x.key=tempfa.key+str(tempfa.id)+"-"
+        x.level=tempfa.level+1
+        x.pathvalue=tempfa.pathvalue+"-"+x.value
+        x.save()
+    
+  
+    return HttpResponseRedirect("/classdetail/"+num+"/edit/")
+
+
+def classedit(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+    
+    classList = SortTree.objects.filter(owner=userid).order_by("pathvalue")
+    tablehtml = makehtml(classList)
+    classInfo = SortTree.objects.get(owner=userid,id=num)
+    tempsonlist = SortTree.objects.filter(owner=userid,key__contains=classInfo.key+str(classInfo.id)+"-")
+    classListB=[]
+    for x in classList:
+        if x not in tempsonlist:
+            classListB.append(x)
+    
+    return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'edit':True,'classInfo':classInfo,"classListB":classListB})
+
+
+def classdel(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+    
+    curclass = SortTree.objects.get(owner=userid,id=num)
+    tempsonlist = SortTree.objects.filter(owner=userid,key__contains=curclass.key+str(curclass.id)+"-")
+    
+
+    curdocs = Docs.objects.filter(owner=userid,treenodeid=curclass.id)
+    for x in curdocs:
+        x.delete()
+    for x in tempsonlist:
+        dellist=Docs.objecs.filter(owner=userid,treenodeid=x.id)
+        for y in dellist:
+            y.delete()
+
+    curclass.delete()
+    for x in tempsonlist:
+        x.delete()
+
+    return HttpResponseRedirect("/index/")
+
+
+
 
 def login(request):
     try:

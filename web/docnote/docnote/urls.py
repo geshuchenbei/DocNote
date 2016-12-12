@@ -38,5 +38,9 @@ urlpatterns = [
 	url(r'^deldoc/(?P<num>[0-9]+)/$',views.delDoc),
 	url(r'^classdetail/(?P<num>[0-9]+)/cur/$',views.classcurDetail),
 	url(r'^classdetail/(?P<num>[0-9]+)/full/$',views.classfullDetail),
+	url(r'^classdetail/(?P<num>[0-9]+)/edit/$',views.classedit),
+	url(r'^classdetail/(?P<num>[0-9]+)/edit/newname$',views.classnewname),
+	url(r'^classdetail/(?P<num>[0-9]+)/edit/newfather$',views.classnewfather),
+	url(r'^classdetail/(?P<num>[0-9]+)/edit/del$',views.classdel),
 
 ]

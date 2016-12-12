@@ -20,7 +20,7 @@
     <link href="{% static 'users/css/bootstrap.min.css' %}" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{% static 'users/css/bootstrap.min.css' %}" />
     <!-- Custom styles for this template -->
-    <link href="http://v3.bootcss.com/examples/starter-template/starter-template.css" rel="stylesheet">
+    <link href="{% static 'users/css/starter-template.css' %}" rel="stylesheet">
 
     <link href="{% static 'users/css/style.css' %}" rel="stylesheet">
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
@@ -109,8 +109,90 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="myModal233" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改分类名称</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="./newname">
+      <div class="modal-body">
+      	
+        <h5>输入新的分类名称</h5>
+        <input name="newclassname" type="text" class="form-control" placeholder="" required="" value="{{classInfo.value}}">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="myModal666" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">修改分类路径</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="./newfather">
+      <div class="modal-body">
+      	<h5>选择新的父分类</h5>
+      	<select name="newfatherid" class="form-control">
+      		<option value ="-1">无</option>
+      		{% for node in classListB %}
+      			{% if classInfo.id == node.id %}
+      			{% elif classInfo.parendid == node.id %}
+				<option selected="selected" value ={{node.id}}>{{node.pathvalue}}</option>
+					{% else %}
+				<option value ={{node.id}}>{{node.pathvalue}}</option>
+ 				 	{% endif %}
+  				{% endfor %}
+  				
+			</select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary">保存更改</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 
+
+<div class="modal fade" id="myModal000" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">删除</h4>
+      </div>
+      
+      <form class="form-signin" role="form" method="post" action="./del">
+      <div class="modal-body">
+		<div class="alert alert-danger" role="alert">
+      
+      
+			<h5><strong>确认删除么？删除后将不可恢复</strong></h5>
+			<h5><strong>本分类下属分类及文献将全部被删除！</strong></h5>
+      	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-danger">确认删除</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 
 <!-- ---------------nav--------------------------- -->
@@ -224,15 +306,54 @@
         <div class="col-md-7">
 
 <ul class="nav nav-tabs" role="tablist">
-{% if fullDoc %}
+{% if edit %}
+	<li role="presentation" ><a href="../cur">当前节点下文献</a></li>
+  <li role="presentation" ><a href="../full">子节点下所有文献</a></li>
+  <li role="presentation" class="active"><a href="../edit">管理当前分类</a></li>
+{% else %}
+
+	{% if fullDoc %}
   <li role="presentation" ><a href="../cur">当前节点下文献</a></li>
   <li role="presentation" class="active"><a href="../full">子节点下所有文献</a></li>
+  <li role="presentation"><a href="../edit">管理当前分类</a></li>
   {% else %}
     <li role="presentation" class="active"><a href="../cur">当前节点下文献</a></li>
   <li role="presentation"><a href="../full">子节点下所有文献</a></li>
+    <li role="presentation"><a href="../edit">管理当前分类</a></li>
   {% endif %}
+{% endif %}
 </ul>
+			{% if edit %}
 			
+			<table class="table table-hover">
+            <thead>
+              <tr>
+                <th>分类名称：{{classInfo.value}}</th><th><button type="button" class="btn btn-lg btn-primary btn-sm" data-toggle="modal" data-target="#myModal233">修改</button></th>
+              </tr>
+              
+              
+              <tr>
+                <th>当前路径：{{classInfo.pathvalue}}</th><th><button type="button" class="btn btn-lg btn-primary btn-sm " data-toggle="modal" data-target="#myModal666">修改</button></th>
+              </tr>
+              
+              
+              
+              <tr>
+                <th>提取下载本节点下所有文献</th><th><button type="button" class="btn btn-lg btn-primary btn-sm">下载</button></th>
+              </tr>
+              
+              
+              
+              <tr>
+                <th>删除当前分类</th><th><button type="button" class="btn btn-lg btn-danger btn-sm" data-toggle="modal" data-target="#myModal000">删除</button></th>
+              </tr>
+            </thead>
+            
+            
+          </table>
+			
+			
+			{% else %}
 			<table class="table table-hover">
             <thead>
               <tr>
@@ -256,11 +377,12 @@
             </tbody>
             {% empty %}
 				<div class="alert alert-info" role="alert">
-        		<strong>当前分类下还没有文献，快去添加把！</strong>
+        		<strong>当前分类下还没有文献，快去添加吧！</strong>
       		</div>  
           	{% endfor %}
           </table>
           
+          {% endif %}
 
 
 		</div>
