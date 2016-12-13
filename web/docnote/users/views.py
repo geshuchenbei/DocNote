@@ -1,9 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
+from django.http import StreamingHttpResponse
 from django.shortcuts import render_to_response
 from .models import Users,SortTree,Docs
 import time
+import urllib.request
+import os
+from zipfile import *
+import shutil
 # Create your views here.
 
 def getUserID(request):
@@ -110,7 +115,16 @@ def delDoc(request,num='1'):
     tempDoc.delete()
     return HttpResponseRedirect("/index/")
 
+def docupdatefile(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+    
+    tempdoc=Docs.objects.get(owner=userid,id=num)
+    tempdoc.docfile=request.FILES['docfile']
+    tempdoc.save()
 
+    return HttpResponseRedirect("/docdetail/"+num)
 
 def newdoc(request):
     userid=getUserID(request)
@@ -130,6 +144,7 @@ def newdoc(request):
         usernote="",
         treenodeid=ntreenodeid,
         owner=userid,
+        docfile=request.FILES['docfile'],
     )
     tempDoc.save()
 
@@ -356,9 +371,106 @@ def classdel(request,num="1"):
 
     return HttpResponseRedirect("/index/")
 
+def downloadfile_standard(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+
+
+    docinfo=Docs.objects.get(owner=userid,id=num)
+
+    def makelogfile(fn , buf_size=262144):
+        
+        my_dir = 'temp/uploads/'
+        for file_name in os.listdir(my_dir):
+            os.remove(my_dir+file_name)
+    
+        f = open("temp/"+urllib.request.unquote(fn)+".log" ,"w")
+        f.write(docinfo.readlog)
+        f.close()
+
+        g = open("temp/"+urllib.request.unquote(fn)+".note","w")
+        g.write(docinfo.usernote)
+        g.close()
+
+
+        shutil.copyfile(urllib.request.unquote(fn),'temp/'+urllib.request.unquote(fn))
+        truename=urllib.request.unquote(fn)[8:]
 
 
 
+        myzip = ZipFile('tempzip', 'w', ZIP_DEFLATED) 
+        for file_name in os.listdir(my_dir): 
+            file_path = my_dir + file_name 
+            print(file_path) 
+            myzip.write(file_path,file_name) 
+        myzip.close() 
+
+        shutil.copyfile('tempzip','temp/uploads/'+truename+'.zip')
+        
+        
+
+
+
+    def readFile(fn, buf_size=262144):
+        f = open(urllib.request.unquote(fn), "rb")
+        while True:
+            c = f.read(buf_size)
+            if c:
+                yield c
+            else:
+                break
+        f.close()
+  
+#    file_name = docinfo.docfile.url
+#    response = HttpResponse(readFile(file_name))
+  
+#    return response
+
+
+    the_file_name = docinfo.docfile.url
+    makelogfile(the_file_name)
+    the_file_name="temp/"+the_file_name+'.zip'
+    response = StreamingHttpResponse(readFile(the_file_name))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name[13:])
+
+    return response
+
+
+def downloadfile_docdetail(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+
+
+    docinfo=Docs.objects.get(owner=userid,id=num)
+
+
+  
+    def readFile(fn, buf_size=262144):
+        f = open(urllib.request.unquote(fn), "rb")
+        while True:
+            c = f.read(buf_size)
+            if c:
+                yield c
+            else:
+                break
+        f.close()
+  
+#    file_name = docinfo.docfile.url
+#    response = HttpResponse(readFile(file_name))
+  
+#    return response
+
+
+    the_file_name = docinfo.docfile.url
+    response = StreamingHttpResponse(readFile(the_file_name))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name[8:])
+
+    return response
+  
 def login(request):
     try:
         realpwd=Users.objects.get(username=request.POST['username']).password

@@ -80,7 +80,7 @@
         <h4 class="modal-title" id="myModalLabel">添加新文献</h4>
       </div>
       
-      <form class="form-signin" role="form" method="post" action="/newdoc/">
+      <form class="form-signin" role="form" method="post" action="/newdoc/" enctype="multipart/form-data">
       <div class="modal-body">
       	<h5>选择分类</h5>
       	<select name="doctreenodeid" class="form-control">
@@ -100,6 +100,14 @@
       		<option value ="已粗读">已粗读</option>
       		<option value ="已精读">已精读</option>
 			</select>
+			
+			<h5>上传文献</h5>
+			<input type="file" name="docfile" class="form-control">
+
+			
+			
+			
+			
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -220,17 +228,7 @@
 				</button>
 	  	</form>
 	  	
-	  	<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">分类管理 <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-          	<li><a href="/classdetail/">编辑分类</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
+	  	
 	  	<form action="/newclass/" class="navbar-form navbar-left" data-toggle="modal" data-target="#myModal2">
 				<button type="button" class="btn btn-link">
   					新增文献
@@ -238,42 +236,13 @@
 	  	</form>
 
         
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">文献管理 <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
         
-        <li><a href="#">Link</a></li>
+        
+        <li><a href="/index/">返回主页</a></li>
       </ul>
       
         
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
-        </li>
-      </ul>
-      <form class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-      </form>
+      
       
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

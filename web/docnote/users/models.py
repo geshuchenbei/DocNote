@@ -23,3 +23,4 @@ class Docs(models.Model):
 	usernote = models.TextField() 
 	treenodeid = models.IntegerField()
 	owner = models.IntegerField()
+	docfile = models.FileField(upload_to="uploads/")

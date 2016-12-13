@@ -42,5 +42,9 @@ urlpatterns = [
 	url(r'^classdetail/(?P<num>[0-9]+)/edit/newname$',views.classnewname),
 	url(r'^classdetail/(?P<num>[0-9]+)/edit/newfather$',views.classnewfather),
 	url(r'^classdetail/(?P<num>[0-9]+)/edit/del$',views.classdel),
+	url(r'^docdetail/(?P<num>[0-9]+)/download$',views.downloadfile_docdetail),
+	url(r'^docdetail/(?P<num>[0-9]+)/newfile$',views.docupdatefile),
+	url(r'^docdetail/(?P<num>[0-9]+)/standardfile$',views.downloadfile_standard),
+
 
 ]
