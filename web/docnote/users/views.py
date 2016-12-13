@@ -21,6 +21,10 @@ def getUserID(request):
     except:
         return None
 
+def getUsername(num):
+    tempuser=Users.objects.get(id=num)
+    return tempuser.username
+
 def loginPage(request):
     return render_to_response("users/login.html")
 
@@ -234,7 +238,9 @@ def indexPage(request):
     tablehtml = makehtml(classList)
     docList = Docs.objects.filter(owner=userid).order_by("-id")
     
-    return render_to_response("users/index.html",{'classList':classList,'tablehtml':tablehtml,'docList':docList})
+
+    username=getUsername(userid)
+    return render_to_response("users/index.html",{'classList':classList,'tablehtml':tablehtml,'docList':docList,'username':username})
 
 
 def docdetail(request,num='1'):
@@ -245,7 +251,9 @@ def docdetail(request,num='1'):
     classList = SortTree.objects.filter(owner=userid).order_by("pathvalue")
     docInfo = Docs.objects.filter(owner=userid,id=num)
     classInfo = SortTree.objects.filter(owner=userid,id=docInfo[0].treenodeid)
-    return render_to_response("users/docdetail.html",{'classList':classList,'docInfo':docInfo[0],'classInfo':classInfo[0].pathvalue})
+
+    username=getUsername(userid)
+    return render_to_response("users/docdetail.html",{'classList':classList,'docInfo':docInfo[0],'classInfo':classInfo[0].pathvalue,'username':username})
 
 def classcurDetail(request,num="1"):
     userid=getUserID(request)
@@ -255,7 +263,9 @@ def classcurDetail(request,num="1"):
     classList = SortTree.objects.filter(owner=userid).order_by("pathvalue")
     tablehtml = makehtml(classList)
     curdocList = Docs.objects.filter(owner=userid,treenodeid=num)
-    return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'docList':curdocList,'fullDoc':False})
+
+    username=getUsername(userid)
+    return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'docList':curdocList,'fullDoc':False,'username':username})
 
 
 def classfullDetail(request,num="1"):
@@ -276,7 +286,9 @@ def classfullDetail(request,num="1"):
         for y in temp:
             fulldocList.append(y)
     
-    return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'docList':fulldocList,'fullDoc':True})
+
+    username=getUsername(userid)
+    return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'docList':fulldocList,'fullDoc':True,'username':username})
 
 def dreplace(bstr,key,newname):
     k=bstr.split("-")
@@ -346,7 +358,8 @@ def classedit(request,num="1"):
         if x not in tempsonlist:
             classListB.append(x)
     
-    return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'edit':True,'classInfo':classInfo,"classListB":classListB})
+    username=getUsername(userid)
+    return render_to_response("users/treedetail.html",{'classList':classList,'tablehtml':tablehtml,'edit':True,'classInfo':classInfo,"classListB":classListB,'username':username})
 
 
 def classdel(request,num="1"):
@@ -563,5 +576,6 @@ def register(request):
         return render_to_response("users/login.html",{'message_regsuccess':True})
     else:
         return render_to_response("users/register.html",{'message_userexist':True})
-
-
+def logout(request):
+    request.session['user']=None
+    return render_to_response("users/login.html",{'message_logout':True})

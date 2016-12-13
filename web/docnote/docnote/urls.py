@@ -46,5 +46,6 @@ urlpatterns = [
 	url(r'^docdetail/(?P<num>[0-9]+)/newfile$',views.docupdatefile),
 	url(r'^docdetail/(?P<num>[0-9]+)/standardfile$',views.downloadfile_standard),
 	url(r'^classdetail/(?P<num>[0-9]+)/downloadfile$',views.downloadfile_tree),
+	url(r'^logout/$',views.logout),
 
 ]
