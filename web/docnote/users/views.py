@@ -47,7 +47,7 @@ def setreadB(request,num='1'):
 
     tempDoc=Docs.objects.get(id=num,owner=userid)
     tempDoc.readstatus="已精读"
-    tempDoc.readlog+="\n"+getnowtime()+"\n更新阅读状态为 已细读"
+    tempDoc.readlog+="\n"+getnowtime()+"\n更新阅读状态为 已精读"
     tempDoc.save()
     return HttpResponseRedirect("/docdetail/"+num+"/")
     
@@ -122,6 +122,7 @@ def docupdatefile(request,num="1"):
     
     tempdoc=Docs.objects.get(owner=userid,id=num)
     tempdoc.docfile=request.FILES['docfile']
+    tempdoc.readlog+="\n"+getnowtime()+"\n更新文件"
     tempdoc.save()
 
     return HttpResponseRedirect("/docdetail/"+num)
@@ -422,11 +423,6 @@ def downloadfile_standard(request,num="1"):
                 break
         f.close()
   
-#    file_name = docinfo.docfile.url
-#    response = HttpResponse(readFile(file_name))
-  
-#    return response
-
 
     the_file_name = docinfo.docfile.url
     makelogfile(the_file_name)
@@ -458,19 +454,86 @@ def downloadfile_docdetail(request,num="1"):
                 break
         f.close()
   
-#    file_name = docinfo.docfile.url
-#    response = HttpResponse(readFile(file_name))
-  
-#    return response
-
-
     the_file_name = docinfo.docfile.url
     response = StreamingHttpResponse(readFile(the_file_name))
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name[8:])
 
     return response
+
+
+
+def downloadfile_tree(request,num="1"):
+    userid=getUserID(request)
+    if userid==None:
+        return render_to_response('users/login.html',{'error_notlogin':True})
+
+
+
+
+    classList = SortTree.objects.filter(owner=userid).order_by("pathvalue")
+    curnode = SortTree.objects.get(owner=userid,id=num)
+    tempsonlist = SortTree.objects.filter(owner=userid,key__contains=curnode.key+str(curnode.id)+"-")
+    fulldocList=[]
+    curdocList = Docs.objects.filter(owner=userid,treenodeid=num)
+    for x in curdocList:
+        fulldocList.append((x,curnode.pathvalue))
+    for x in tempsonlist:
+        temp = Docs.objects.filter(owner=userid,treenodeid=x.id)
+        for y in temp:
+            fulldocList.append((y,x.pathvalue))
+
+
+    
+    my_dir = 'temp/uploads/'
+    for file_name in os.listdir(my_dir):
+        os.remove(my_dir+file_name)
+    for x in fulldocList:
+        shutil.copyfile(urllib.request.unquote(x[0].docfile.url),'temp/'+urllib.request.unquote(x[0].docfile.url)+"---$#$---"+x[1])
+    
+
+    def gao(value):
+        k=value.split("---$#$---")
+        ans=""
+        print(k)
+        temp=k[1].split('-')
+        for x in temp:ans+=x+os.sep
+        print(ans)
+        return ans+os.sep+k[0]
+
+    myzip = ZipFile('tempzip', 'w', ZIP_DEFLATED) 
+    for file_name in os.listdir(my_dir): 
+        file_path = my_dir + file_name
+        print(gao(file_name))
+        myzip.write(file_path,gao(file_name)) 
+    myzip.close() 
+
+    truename=curnode.pathvalue
+    shutil.copyfile('tempzip','temp/uploads/'+truename+'.zip')
+
+    print("------------------------------*******************---------------------------------")
+
+        
   
+    def readFile(fn, buf_size=262144):
+        f = open(urllib.request.unquote(fn), "rb")
+        while True:
+            c = f.read(buf_size)
+            if c:
+                yield c
+            else:
+                break
+        f.close()
+  
+    the_file_name='temp/uploads/'+truename+'.zip'
+    response = StreamingHttpResponse(readFile(the_file_name))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment;filename="{0}"'.format(the_file_name[13:])
+
+    return response
+
+
+
 def login(request):
     try:
         realpwd=Users.objects.get(username=request.POST['username']).password
